@@ -28,7 +28,7 @@ void Main::Init()
 	grid = Grid::Create();
 
 	cam1 = Camera::Create();
-	cam1->LoadFile("Cam.xml");
+	cam1->LoadFile("MapToolCam.xml");
 
 	map = Terrain::Create();
 	map->shader = RESOURCE->shaders.Load("5.MapEditor.hlsl");
@@ -41,6 +41,7 @@ void Main::Init()
 	cam1->viewport.height = App.GetHeight();
 	cam1->width = App.GetWidth();
 	cam1->height = App.GetHeight();
+	cam1->mainCamSpeed = 200.0f;
 }
 
 void Main::Release()
@@ -81,6 +82,7 @@ void Main::Update()
 
 	ImGui::Begin("Hierarchy");
 	map->RenderHierarchy();
+	cam1->RenderHierarchy();
 	ImGui::End();
 
 	cam1->ControlMainCam();

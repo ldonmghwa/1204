@@ -235,7 +235,12 @@ void Terrain::LoadHeightRaw(string file)
 void Terrain::LoadHeightImage(string file)
 {
 	ScratchImage* img = Texture::GetPixelData(file);
-
+	BinaryWriter bw;
+	Utility::Replace(&file, ".jpg", ".hmp");
+	wstring strtemp;
+	strtemp.assign(file.begin(), file.end());
+	
+	bw.Open(L"../Contents/HeightMap/" + strtemp);
 	//cout << "픽셀갯수:" << img->GetPixelsSize() << endl;
 	//cout << "포맷:" << img->GetImages()[0].format << endl;
 	//cout << "가로크기:" << img->GetImages()[0].width << endl;
@@ -248,7 +253,7 @@ void Terrain::LoadHeightImage(string file)
 	size = garo * garo;
 	CreateMesh(garo);
 
-
+	cout << img->GetImages()[0].format << endl;
 	if (img->GetImages()[0].format == DXGI_FORMAT_R8_UNORM)
 	{
 		unsigned char* data = (unsigned char*)img->GetImages()[0].pixels;
@@ -275,7 +280,7 @@ void Terrain::LoadHeightImage(string file)
 			}
 		}
 	}
-	else if (img->GetImages()[0].format == DXGI_FORMAT_B8G8R8A8_UNORM)
+	else if (img->GetImages()[0].format == DXGI_FORMAT_B8G8R8A8_UNORM)//32비트
 	{
 		unsigned char* data = (unsigned char*)img->GetImages()[0].pixels;
 		for (int i = 0; i < garo; i++)
@@ -283,11 +288,24 @@ void Terrain::LoadHeightImage(string file)
 			for (int j = 0; j < garo; j++)
 			{
 				VertexTerrain* vertices = (VertexTerrain*)mesh->vertices;
-				float _y = (float)data[(i * garo + j) * 4] * 0.0001f;  // Adjust the index based on the channel you want
+				float _y = (float)data[(i * garo + j) * 4] * 0.1f;  // Adjust the index based on the channel you want
 				vertices[i * garo + j].position.y = _y;
 			}
 		}
 	}
+	else if (img->GetImages()[0].format == DXGI_FORMAT_R8G8B8A8_UNORM) {
+		unsigned char* data = (unsigned char*)img->GetImages()[0].pixels;
+		for (int i = 0; i < garo; i++) {
+			for (int j = 0; j < garo; j++) {
+				VertexTerrain* vertices = (VertexTerrain*)mesh->vertices;
+				float _y = (float)data[(i * garo + j) * 4] * 1.0f;  // Normalize to [0.0, 1.0]
+				vertices[i * garo + j].position.y = _y;
+				bw.Float(_y);
+			}
+		}
+	}
+
+	bw.Close();
 	/*if (img->GetImages()[0].format == DXGI_FORMAT_R32_UNORM)
 	{
 
@@ -445,7 +463,7 @@ void Terrain::RenderDetail()
 
 
 			int last = garo;
-			if (ImGui::SliderInt("rowSize", &garo, 2, 513))
+			if (ImGui::SliderInt("rowSize", &garo, 2, 1000))
 			{
 				UINT vertexCount = garo * garo;
 				VertexType type = VertexType::TERRAIN;
