@@ -19,7 +19,10 @@ Main::Main()
 
 Main::~Main()
 {
-
+	grid->Release();
+	cam1->Release();
+	map->Release();
+	delete pn;
 }
 
 
@@ -42,6 +45,8 @@ void Main::Init()
 	cam1->width = App.GetWidth();
 	cam1->height = App.GetHeight();
 	cam1->mainCamSpeed = 200.0f;
+	pn = new PerlinNoise();
+	pn->Perlin(11, 16);
 }
 
 void Main::Release()
@@ -92,121 +97,13 @@ void Main::Update()
 
 	cam1->Update();
 
-	
 
 
 }
 
 void Main::LateUpdate()
 {
-	Vector3 Hit;
-	if(map->ComPutePicking(Utility::MouseToRay(), Hit))
-	{
-		_brush.point = Hit;
-
-		if (INPUT->KeyPress(VK_MBUTTON))
-		{
-			VertexTerrain* vertices = (VertexTerrain*)map->mesh->vertices;
-			Matrix Inverse = map->W.Invert();
-			Hit = Vector3::Transform(Hit, Inverse);
-			for (UINT i = 0; i < map->mesh->vertexCount; i++)
-			{
-				Vector3 v1 = Vector3(Hit.x, 0.0f, Hit.z);
-				Vector3 v2 = Vector3(vertices[i].position.x,
-					0.0f, vertices[i].position.z);
-				Vector3 temp = v2 - v1;
-				float Dis = temp.Length();
-				float w;
-
-				if (brushShape == BrushShape::Rect)
-				{
-					float DisX = fabs(v1.x - v2.x);
-					float DisZ = fabs(v1.z - v2.z);
-
-					if (DisX < _brush.range and
-						DisZ < _brush.range)
-					{
-						//nomalize
-						//w = Dis / (_brush.range * 1.414f);
-						// 
-						w = ((DisX > DisZ) ? DisX : DisZ) / _brush.range;
-
-
-
-						// 0 ~ 1
-						w = Utility::Saturate(w);
-
-						w = (1.0f - w);
-					}
-					else
-					{
-						w = 0.0f;
-					}
-				}
-				if (brushShape == BrushShape::Circle)
-				{
-					w = Dis / _brush.range;
-					w = Utility::Saturate(w);
-					w = (1.0f - w);
-				}
-				
-
-
-
-
-
-
-				if (brushType == BrushType::Linear)
-				{
-					if (w)
-					{
-						vertices[i].position.y += w * buildSpeed * DELTA;
-					}
-				}
-				if (brushType == BrushType::Smooth)
-				{
-					if (w)
-					{
-						vertices[i].position.y += sin(w * PI * 0.5f) * buildSpeed * DELTA;
-					}
-				}
-				if (brushType == BrushType::Add)
-				{
-					if (w)
-					{
-						vertices[i].position.y += buildSpeed * DELTA;
-					}
-				}
-				if (brushType == BrushType::Flat)
-				{
-					if (w)
-					{
-						float dd = vertices[i].position.y > Hit.y ? -1 : 1;
-						vertices[i].position.y += w * dd * buildSpeed * DELTA;
-					}
-				}
-
-				if (w)
-				{
-					vertices[i].weights += paint *w * paintSpeed * DELTA;
-					NormalizeWeight(vertices[i].weights);
-
-				}
-
-
-			}
-
-			map->mesh->UpdateBuffer();
-			map->UpdateNormal();
-		}
-		if (INPUT->KeyUp(VK_MBUTTON))
-		{
-			map->UpdateNormal();
-			map->UpdateStructuredBuffer();
-		}
-
-	}
-
+	MapEditBrush();
 
 
 
@@ -255,6 +152,117 @@ void Main::NormalizeWeight(Vector4& in)
 	{
 		weight[i] /= sum;
 	}
+}
+void Main::MapEditBrush()
+{
+	Vector3 Hit;
+	if (map->ComPutePicking(Utility::MouseToRay(), Hit))
+	{
+		_brush.point = Hit;
+
+		if (INPUT->KeyPress(VK_MBUTTON))
+		{
+			VertexTerrain* vertices = (VertexTerrain*)map->mesh->vertices;
+			Matrix Inverse = map->W.Invert();
+			Hit = Vector3::Transform(Hit, Inverse);
+			for (UINT i = 0; i < map->mesh->vertexCount; i++)
+			{
+				Vector3 v1 = Vector3(Hit.x, 0.0f, Hit.z);
+				Vector3 v2 = Vector3(vertices[i].position.x,
+					0.0f, vertices[i].position.z);
+				Vector3 temp = v2 - v1;
+				float Dis = temp.Length();
+				float w;
+
+				if (brushShape == BrushShape::Rect)
+				{
+					float DisX = fabs(v1.x - v2.x);
+					float DisZ = fabs(v1.z - v2.z);
+
+					if (DisX < _brush.range and
+						DisZ < _brush.range)
+					{
+						//nomalize
+						//w = Dis / (_brush.range * 1.414f);
+						// 
+						w = ((DisX > DisZ) ? DisX : DisZ) / _brush.range;
+
+
+
+						// 0 ~ 1
+						w = Utility::Saturate(w);
+
+						w = (1.0f - w);
+					}
+					else
+					{
+						w = 0.0f;
+					}
+				}
+				if (brushShape == BrushShape::Circle)
+				{
+					w = Dis / _brush.range;
+					w = Utility::Saturate(w);
+					w = (1.0f - w);
+				}
+
+
+
+
+
+
+
+				if (brushType == BrushType::Linear)
+				{
+					if (w)
+					{
+						vertices[i].position.y += w * buildSpeed * DELTA;
+					}
+				}
+				if (brushType == BrushType::Smooth)
+				{
+					if (w)
+					{
+						vertices[i].position.y += sin(w * PI * 0.5f) * buildSpeed * DELTA;
+					}
+				}
+				if (brushType == BrushType::Add)
+				{
+					if (w)
+					{
+						vertices[i].position.y += buildSpeed * DELTA;
+					}
+				}
+				if (brushType == BrushType::Flat)
+				{
+					if (w)
+					{
+						float dd = vertices[i].position.y > Hit.y ? -1 : 1;
+						vertices[i].position.y += w * dd * buildSpeed * DELTA;
+					}
+				}
+
+				if (w)
+				{
+					vertices[i].weights += paint * w * paintSpeed * DELTA;
+					NormalizeWeight(vertices[i].weights);
+
+				}
+
+
+			}
+
+			map->mesh->UpdateBuffer();
+			map->UpdateNormal();
+		}
+		if (INPUT->KeyUp(VK_MBUTTON))
+		{
+			map->UpdateNormal();
+			map->UpdateStructuredBuffer();
+		}
+
+	}
+
 }
 
 int WINAPI wWinMain(HINSTANCE instance, HINSTANCE prevInstance, LPWSTR param, int command)

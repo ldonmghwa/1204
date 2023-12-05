@@ -125,6 +125,7 @@ extern Application App;//Extern Global
 #include "Rain.h"
 #include "Pop.h"
 #include "Water.h"
+#include "PerlinNoise.h"
 
 
 #include "Utility.h"

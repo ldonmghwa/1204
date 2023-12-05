@@ -52,6 +52,7 @@ private:
 	Camera* cam1;
 	Grid* grid;
 
+	PerlinNoise* pn;
 
 public:
 	Main();
@@ -65,4 +66,5 @@ public:
 	virtual void Render() override;
 	virtual void ResizeScreen() override;
 	void NormalizeWeight(Vector4& in);
+	void MapEditBrush();
 };
