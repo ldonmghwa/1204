@@ -267,7 +267,7 @@ void Terrain::LoadHeightImage(string file)
 			}
 		}
 	}
-	else if (img->GetImages()[0].format == DXGI_FORMAT_R16_UNORM)
+	else if (img->GetImages()[0].format == DXGI_FORMAT_R16_UNORM)//16비트
 	{
 		unsigned short* data = (unsigned short*)img->GetImages()[0].pixels;
 		for (int i = 0; i < garo; i++)
@@ -275,8 +275,19 @@ void Terrain::LoadHeightImage(string file)
 			for (int j = 0; j < garo; j++)
 			{
 				VertexTerrain* vertices = (VertexTerrain*)mesh->vertices;
-				float _y = (float)data[(i * garo + j)] * 0.01f;
+				float _y = (float)data[(i * garo + j)] * 0.001f;
 				vertices[i * garo + j].position.y = _y;
+			}
+		}
+	}
+	else if (img->GetImages()[0].format == DXGI_FORMAT_R8G8B8A8_UNORM) {//24비트
+		unsigned char* data = (unsigned char*)img->GetImages()[0].pixels;
+		for (int i = 0; i < garo; i++) {
+			for (int j = 0; j < garo; j++) {
+				VertexTerrain* vertices = (VertexTerrain*)mesh->vertices;
+				float _y = (float)data[(i * garo + j) * 4] * 1.0f;  // Normalize to [0.0, 1.0]
+				vertices[i * garo + j].position.y = _y;
+				bw.Float(_y);
 			}
 		}
 	}
@@ -293,17 +304,20 @@ void Terrain::LoadHeightImage(string file)
 			}
 		}
 	}
-	else if (img->GetImages()[0].format == DXGI_FORMAT_R8G8B8A8_UNORM) {
-		unsigned char* data = (unsigned char*)img->GetImages()[0].pixels;
-		for (int i = 0; i < garo; i++) {
-			for (int j = 0; j < garo; j++) {
+	else if (img->GetImages()[0].format == DXGI_FORMAT_R16G16B16A16_UNORM)//64비트
+	{
+		unsigned short* data = (unsigned short*)img->GetImages()[0].pixels;
+		for (int i = 0; i < garo; i++)
+		{
+			for (int j = 0; j < garo; j++)
+			{
 				VertexTerrain* vertices = (VertexTerrain*)mesh->vertices;
-				float _y = (float)data[(i * garo + j) * 4] * 1.0f;  // Normalize to [0.0, 1.0]
+				float _y = (float)data[(i * garo + j) * 4] * 0.0005f;  // Adjust the index based on the channel you want
 				vertices[i * garo + j].position.y = _y;
-				bw.Float(_y);
 			}
 		}
 	}
+	
 
 	bw.Close();
 	/*if (img->GetImages()[0].format == DXGI_FORMAT_R32_UNORM)
