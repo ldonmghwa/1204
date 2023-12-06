@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "Perlin.h"
 #include "Main.h"
 
 Main::Main()
@@ -45,8 +46,13 @@ void Main::Init()
 	cam1->width = App.GetWidth();
 	cam1->height = App.GetHeight();
 	cam1->mainCamSpeed = 200.0f;
-	pn = new PerlinNoise();
-	pn->Perlin(11, 16);
+
+	// Example usage:
+	for (int i = 0; i < 10; ++i) {
+		double x = i * 0.1;
+		double noiseValue = perlin.noise(x);
+		std::cout << "At x = " << x << ", Perlin Noise Value = " << noiseValue << std::endl;
+	}
 }
 
 void Main::Release()

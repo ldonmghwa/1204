@@ -53,6 +53,7 @@ private:
 	Grid* grid;
 
 	PerlinNoise* pn;
+	Perlin perlin;
 
 public:
 	Main();
