@@ -85,6 +85,8 @@ extern Application App;//Extern Global
 #include "Input.h"
 #include "Timer.h"
 #include "BinaryFile.h"
+#include "lodepng.h"
+#include "EasyBMP.h"
 
 #include "DepthState.h"
 #include "BlendState.h"
@@ -127,7 +129,7 @@ extern Application App;//Extern Global
 #include "Pop.h"
 #include "Water.h"
 #include "PerlinNoise.h"
-
+#include "PerlinNoise2.h"
 
 #include "Utility.h"
 

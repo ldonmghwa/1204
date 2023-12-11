@@ -143,11 +143,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Perlin.cpp" />
+    <ClCompile Include="ONEDPerlinNoise.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main.h" />
-    <ClInclude Include="Perlin.h" />
+    <ClInclude Include="ONEDPerlinNoise.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>

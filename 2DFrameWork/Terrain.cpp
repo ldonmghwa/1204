@@ -262,7 +262,7 @@ void Terrain::LoadHeightImage(string file)
 			for (int j = 0; j < garo; j++)
 			{
 				VertexTerrain* vertices = (VertexTerrain*)mesh->vertices;
-				float _y = (float)data[(i * garo + j)] * 0.1f;
+				float _y = (float)data[(i * garo + j)] * 0.01f;
 				vertices[i * garo + j].position.y = _y;
 			}
 		}
@@ -435,7 +435,7 @@ void Terrain::RenderDetail()
 			}
 
 			if (GUI->FileImGui("LoadHeightImage", "LoadHeightImage",
-				".png,.bmp,.jpg,.jpeg", "../Contents/Texture"))
+				".png,.bmp,.jpg,.jpeg", "../Contents/HeightMap"))
 			{
 				string imageFile;
 				imageFile = ImGuiFileDialog::Instance()->GetCurrentFileName();

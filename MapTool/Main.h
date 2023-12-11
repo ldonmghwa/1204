@@ -51,10 +51,8 @@ private:
 
 	Camera* cam1;
 	Grid* grid;
-
 	PerlinNoise* pn;
-	Perlin perlin;
-
+	PerlinNoise2* pn2;
 public:
 	Main();
 	~Main();

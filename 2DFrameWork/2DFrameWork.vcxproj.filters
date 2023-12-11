@@ -128,6 +128,22 @@
       <Filter>Render</Filter>
     </ClInclude>
     <ClInclude Include="PerlinNoise.h" />
+    <ClInclude Include="lodepng.h">
+      <Filter>FIle</Filter>
+    </ClInclude>
+    <ClInclude Include="EasyBMP.h">
+      <Filter>FIle</Filter>
+    </ClInclude>
+    <ClInclude Include="EasyBMP_BMP.h">
+      <Filter>FIle</Filter>
+    </ClInclude>
+    <ClInclude Include="EasyBMP_DataStructures.h">
+      <Filter>FIle</Filter>
+    </ClInclude>
+    <ClInclude Include="EasyBMP_VariousBMPutilities.h">
+      <Filter>FIle</Filter>
+    </ClInclude>
+    <ClInclude Include="PerlinNoise2.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="System">
@@ -276,5 +292,12 @@
       <Filter>Render</Filter>
     </ClCompile>
     <ClCompile Include="PerlinNoise.cpp" />
+    <ClCompile Include="lodepng.cpp">
+      <Filter>FIle</Filter>
+    </ClCompile>
+    <ClCompile Include="EasyBMP.cpp">
+      <Filter>FIle</Filter>
+    </ClCompile>
+    <ClCompile Include="PerlinNoise2.cpp" />
   </ItemGroup>
 </Project>

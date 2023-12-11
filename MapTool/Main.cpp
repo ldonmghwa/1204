@@ -1,6 +1,20 @@
 #include "stdafx.h"
-#include "Perlin.h"
+#include "ONEDPerlinNoise.h"
 #include "Main.h"
+
+void SaveHeightmapAsPNG(const std::string& filename, int width, int height) {
+	std::vector<unsigned char> image;
+	image.resize(width * height * 4); // RGBA format
+
+	// Adjust scale factors as needed
+	
+
+	
+
+	// Save the image using LodePNG
+	
+}
+
 
 Main::Main()
 {
@@ -14,7 +28,6 @@ Main::Main()
 	HRESULT hr = D3D->GetDevice()->CreateBuffer(&desc, NULL, &brushBuffer);
 	assert(SUCCEEDED(hr));
 	D3D->GetDC()->PSSetConstantBuffers(10, 1, &brushBuffer);
-
 	//투명 이미지출력
 }
 
@@ -23,12 +36,14 @@ Main::~Main()
 	grid->Release();
 	cam1->Release();
 	map->Release();
-	delete pn;
 }
 
 
 void Main::Init()
 {
+	pn = new PerlinNoise();
+	//pn2 = new PerlinNoise2(512, 512, 5, 0.5, 15731, 789221, 1376312589, 1073741824.0);
+	//pn2 = new PerlinNoise2(512, 512, 5, 0.5, 15731, 24567932+79, 1376312589, 1073741824);
 	grid = Grid::Create();
 
 	cam1 = Camera::Create();
@@ -47,16 +62,73 @@ void Main::Init()
 	cam1->height = App.GetHeight();
 	cam1->mainCamSpeed = 200.0f;
 
-	// Example usage:
-	for (int i = 0; i < 10; ++i) {
-		double x = i * 0.1;
-		double noiseValue = perlin.noise(x);
-		std::cout << "At x = " << x << ", Perlin Noise Value = " << noiseValue << std::endl;
-	}
+	//pn2->SaveHeightmapAsPNG();
+
+	//int Number_Of_Octaves = 5;
+	//float persistence = 0.5f;
+	////float result = pn2.PerlinNoise_2D(6.5f, 3.7f, Number_Of_Octaves, persistence);
+	////std::cout << "Perlin Noise at (2.5, 3.7): " << result << std::endl;
+	//const int width = 1000;
+	//const int height = 1000;
+	//string filename = "../Contents/HeightMap/perlin_noise_"
+	//	+ to_string(Number_Of_Octaves) +
+	//	"_" + to_string(persistence) +
+	//	"_" + to_string(width) + "_" + to_string(height) + ".png";
+	//std::vector<unsigned char> image;
+	//image.resize(width * height * 4); // RGBA format
+
+	//float scaleX = 0.1f;
+	//float scaleY = 0.1f;
+
+	//for (int y = 0; y < height; ++y) {
+	//	for (int x = 0; x < width; ++x) {
+	//		float perlinValue = pn2.PerlinNoise_2D(x * scaleX, y * scaleY, Number_Of_Octaves, persistence);
+	//		unsigned char color = static_cast<unsigned char>((perlinValue + 1.0f) * 0.5f * 255.0f);
+	//		int index = 4 * (y * width + x);
+	//		image[index] = color;
+	//		image[index + 1] = color;
+	//		image[index + 2] = color;
+	//		image[index + 3] = 255; // Alpha channel
+	//	}
+	//}
+
+	//if (lodepng::encode(filename.c_str(), image.data(), width, height) != 0) {
+	//	std::cerr << "Error saving PNG file." << std::endl;
+	//}
+	//else {
+	//	std::cout << "Heightmap saved as " << filename << std::endl;
+	//}
+
+
+	//srand(time(0));
+	//std::vector<unsigned char> image;
+	//image.resize(width * height * 4); // RGBA format
+	//float scaleX = 0.1f;
+	//float scaleY = 0.1f;
+	//// Generate heightmap using Perlin noise
+	//for (int y = 0; y < height; ++y) {
+	//	for (int x = 0; x < width; ++x) {
+	//		float perlinValue = pn->GetPerlinNoise(x * scaleX, y * scaleY);
+	//		unsigned char color = static_cast<unsigned char>((perlinValue + 1.0f) * 0.5f * 255.0f); // Map [-1, 1] to [0, 255]
+	//		int index = 4 * (y * width + x);
+	//		image[index] = color;
+	//		image[index + 1] = color;
+	//		image[index + 2] = color;
+	//		image[index + 3] = 255; // Alpha channel
+	//	}
+	//}
+	//if (lodepng::encode(filename.c_str(), image.data(), width, height) != 0) {
+	//	std::cerr << "Error saving PNG file." << std::endl;
+	//}
+	//else {
+	//	std::cout << "Heightmap saved as " << filename << std::endl;
+	//}
 }
 
 void Main::Release()
 {
+	delete pn;
+	delete pn2;
 }
 
 void Main::Update()
@@ -110,9 +182,6 @@ void Main::Update()
 void Main::LateUpdate()
 {
 	MapEditBrush();
-
-
-
 
 }
 void Main::PreRender()

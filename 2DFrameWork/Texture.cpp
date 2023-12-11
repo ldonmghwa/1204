@@ -70,7 +70,8 @@ ScratchImage* Texture::GetPixelData(string file)
     size_t index = file.find_last_of('.');
     //확장자 문자열 자르기
     string format = file.substr(index + 1, file.length());
-    wstring path = L"../Contents/Texture/" + Utility::ToWString(file);
+    //wstring path = L"../Contents/Texture/" + Utility::ToWString(file);
+    wstring path = L"../Contents/HeightMap/" + Utility::ToWString(file);
 
     ScratchImage* image = new ScratchImage();
     HRESULT hr;
