@@ -36,14 +36,15 @@ Main::~Main()
 	grid->Release();
 	cam1->Release();
 	map->Release();
+	delete pn2;
 }
 
 
 void Main::Init()
 {
-	pn = new PerlinNoise();
+	//pn = new PerlinNoise();
 	//pn2 = new PerlinNoise2(512, 512, 5, 0.5, 15731, 789221, 1376312589, 1073741824.0);
-	//pn2 = new PerlinNoise2(512, 512, 5, 0.5, 15731, 24567932+79, 1376312589, 1073741824);
+	pn2 = new PerlinNoise2(512, 512, 5, 0.5, 31746754, 19864-8478, 46328412, 1073741824);
 	grid = Grid::Create();
 
 	cam1 = Camera::Create();
@@ -61,7 +62,6 @@ void Main::Init()
 	cam1->width = App.GetWidth();
 	cam1->height = App.GetHeight();
 	cam1->mainCamSpeed = 200.0f;
-
 	//pn2->SaveHeightmapAsPNG();
 
 	//int Number_Of_Octaves = 5;
@@ -127,8 +127,6 @@ void Main::Init()
 
 void Main::Release()
 {
-	delete pn;
-	delete pn2;
 }
 
 void Main::Update()

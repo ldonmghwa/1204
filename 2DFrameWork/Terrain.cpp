@@ -235,12 +235,12 @@ void Terrain::LoadHeightRaw(string file)
 void Terrain::LoadHeightImage(string file)
 {
 	ScratchImage* img = Texture::GetPixelData(file);
-	BinaryWriter bw;
+	//BinaryWriter bw;
 	Utility::Replace(&file, ".jpg", ".hmp");
-	wstring strtemp;
-	strtemp.assign(file.begin(), file.end());
+	//wstring strtemp;
+	//strtemp.assign(file.begin(), file.end());
 	
-	bw.Open(L"../Contents/HeightMap/" + strtemp);
+	//bw.Open(L"../Contents/HeightMap/" + strtemp);
 	//cout << "ÇÈ¼¿°¹¼ö:" << img->GetPixelsSize() << endl;
 	//cout << "Æ÷¸Ë:" << img->GetImages()[0].format << endl;
 	//cout << "°¡·ÎÅ©±â:" << img->GetImages()[0].width << endl;
@@ -262,7 +262,7 @@ void Terrain::LoadHeightImage(string file)
 			for (int j = 0; j < garo; j++)
 			{
 				VertexTerrain* vertices = (VertexTerrain*)mesh->vertices;
-				float _y = (float)data[(i * garo + j)] * 0.01f;
+				float _y = (float)data[(i * garo + j)] * 1;
 				vertices[i * garo + j].position.y = _y;
 			}
 		}
@@ -287,7 +287,7 @@ void Terrain::LoadHeightImage(string file)
 				VertexTerrain* vertices = (VertexTerrain*)mesh->vertices;
 				float _y = (float)data[(i * garo + j) * 4] * 1.0f;  // Normalize to [0.0, 1.0]
 				vertices[i * garo + j].position.y = _y;
-				bw.Float(_y);
+				//bw.Float(_y);
 			}
 		}
 	}
@@ -319,7 +319,7 @@ void Terrain::LoadHeightImage(string file)
 	}
 	
 
-	bw.Close();
+	//bw.Close();
 	/*if (img->GetImages()[0].format == DXGI_FORMAT_R32_UNORM)
 	{
 
